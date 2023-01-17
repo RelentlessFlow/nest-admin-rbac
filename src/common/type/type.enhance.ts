@@ -1,4 +1,4 @@
-import { EntityType, IdType } from "../entity/entity";
+import { EntityType } from "../entity/entity";
 
 /**
  * 过滤掉所有的复杂类型，只保留number | string | boolean类型的字段
@@ -13,7 +13,7 @@ export type CreateType<T> = Omit<FilterComplex<T>, 'id'>
 /**
  * 更新DTO类型映射， 过滤复杂数据类型，包含id
  */
-export type UpdateType<T> = Partial<CreateType<T>> & { id: IdType }
+export type UpdateType<T> = Partial<CreateType<T>> & { id: number }
 
 /**
  * 过滤基础实体字段
@@ -26,13 +26,13 @@ export type FilterBaseEntity<T> = {
  * 用于生成复杂查询的查询格式。其格式为
  * { equals: boolean; value: T[P] };
  */
-export type QueryFormat<T> = {
-  [P in keyof T]: ( { equals: boolean, value: T[P] } | T[P] )
+export type MapQueryFormat<T> = {
+  [P in keyof T]: ({ equals: boolean, value: T[P] }) | T[P];
 }
 
 /**
  * 用于生成查询DTO类型，过滤复杂类型
  */
-export type QueryDtoType<T> = Partial<QueryFormat<FilterComplex<T>>>
+export type QueryDtoType<T> = MapQueryFormat<FilterComplex<T>>
 
 // export type CreateType<T> = { [P in keyof T as Extract<P, T[P] extends number | string | boolean ? T[P] : never>]: T[P]; };

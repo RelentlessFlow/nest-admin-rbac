@@ -1,9 +1,8 @@
 import { CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-
-export type IdType = number;
+import { MapQueryFormat } from "../type/type.enhance";
 
 export interface EntityType {
-  id: IdType;
+  id: number;
   createTime: Date;
   updateTime: Date;
 }

@@ -1,16 +1,7 @@
-import {
-  BeforeUpdate,
-  Column,
-  Entity,
-  Index,
-  JoinTable,
-  ManyToMany,
-  PrimaryGeneratedColumn, Unique
-} from "typeorm";
-import { Exclude } from 'class-transformer';
+import { Column, Entity, Index, JoinTable, ManyToMany } from "typeorm";
 import { EntityBase, EntityType } from "../../common/entity/entity";
-import { Resource, ResourceType } from './resource';
-import { Menu, MenuType } from './memu';
+import { Resource, ResourceType } from "./resource";
+import { Menu, MenuType } from "./memu";
 
 export interface RoleType extends EntityType {
   name: string;
@@ -19,21 +10,21 @@ export interface RoleType extends EntityType {
   menu: MenuType[];
 }
 
-@Entity('T_ROLE')
+@Entity("T_ROLE")
 export class Role extends EntityBase implements RoleType {
   @Column({
-    name: 'NAME',
-    comment: '名称',
-    length: 10,
+    name: "NAME",
+    comment: "名称",
+    length: 10
   })
   @Index()
   name: string;
 
   @Column({
-    name: 'DESC',
-    comment: '描述',
+    name: "DESC",
+    comment: "描述",
     length: 100,
-    nullable: true,
+    nullable: true
   })
   description?: string;
 
@@ -41,18 +32,18 @@ export class Role extends EntityBase implements RoleType {
     createForeignKeyConstraints: true,
     nullable: true,
     cascade: true,
-    onDelete: 'NO ACTION',
+    onDelete: "NO ACTION"
   })
   @JoinTable({
-    name: 'T_ROLE_RESOURCE',
+    name: "T_ROLE_RESOURCE",
     joinColumn: {
-      name: 'ROLE_ID',
-      referencedColumnName: 'id',
+      name: "ROLE_ID",
+      referencedColumnName: "id"
     },
     inverseJoinColumn: {
-      name: 'RESOURCE_ID',
-      referencedColumnName: 'id',
-    },
+      name: "RESOURCE_ID",
+      referencedColumnName: "id"
+    }
   })
   resource: Resource[];
 
@@ -60,18 +51,18 @@ export class Role extends EntityBase implements RoleType {
     createForeignKeyConstraints: true,
     nullable: true,
     cascade: true,
-    onDelete: 'NO ACTION',
+    onDelete: "NO ACTION"
   })
   @JoinTable({
-    name: 'T_ROLE_MENU',
+    name: "T_ROLE_MENU",
     joinColumn: {
-      name: 'ROLE_ID',
-      referencedColumnName: 'id',
+      name: "ROLE_ID",
+      referencedColumnName: "id"
     },
     inverseJoinColumn: {
-      name: 'MENU_ID',
-      referencedColumnName: 'id',
-    },
+      name: "MENU_ID",
+      referencedColumnName: "id"
+    }
   })
   menu: Menu[];
 }

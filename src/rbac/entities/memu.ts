@@ -1,46 +1,44 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
-import { Exclude } from 'class-transformer';
-import { EntityType, IdType, EntityBase } from "../../common/entity/entity";
-import { Role, RoleType } from './role';
-import { ManyToMany } from 'typeorm';
+import { Column, Entity, Index, ManyToMany } from "typeorm";
+import { EntityBase, EntityType } from "../../common/entity/entity";
+import { Role, RoleType } from "./role";
 
 export interface MenuType extends EntityType {
   name: string;
   isRoot?: boolean;
-  last?: IdType;
+  last?: number;
   description?: string;
   role: RoleType[];
 }
 
-@Entity('T_MENU')
+@Entity("T_MENU")
 export class Menu extends EntityBase implements MenuType {
   @Column({
-    name: 'NAME',
-    comment: '名称',
-    length: 20,
+    name: "NAME",
+    comment: "名称",
+    length: 20
   })
   @Index()
   name: string;
 
   @Column({
-    name: 'IS_ROOT',
-    comment: '是否为根节点',
-    nullable: true,
+    name: "IS_ROOT",
+    comment: "是否为根节点",
+    nullable: true
   })
   isRoot?: boolean;
 
   @Column({
-    name: 'LAST',
-    comment: '上一节点',
-    nullable: true,
+    name: "LAST",
+    comment: "上一节点",
+    nullable: true
   })
-  last?: IdType;
+  last?: number;
 
   @Column({
-    name: 'DESC',
-    comment: '描述',
+    name: "DESC",
+    comment: "描述",
     length: 100,
-    nullable: true,
+    nullable: true
   })
   description?: string;
 

@@ -4,10 +4,10 @@ import { EntityManager, Repository } from "typeorm";
 import { Role } from "./entities/role";
 import { Resource } from "./entities/resource";
 import { Menu } from "./entities/memu";
-import { CreateRoleDto, QueryRoleDto, QueryRoleDtoType, UpdateRoleDto } from "./dto/role.dto";
+import { CreateRoleDtoType, QueryRoleDtoType, UpdateRoleDtoType } from "./dto/role.dto";
 import { IdExist, UniqueColumn } from "../common/decorator/typeorm.decorator";
-import { IdType } from "../common/entity/entity";
-import { PageOptionsDto, PageOptionsDtoType } from "../common/dto/page.dto";
+import { OrderByType } from "../common/pagination/page.dto";
+import { CreateResourceDtoType, QueryResourceDto, UpdateResourceDtoType } from "./dto/resource.dto";
 
 @Injectable()
 export class RbacService {
@@ -23,26 +23,26 @@ export class RbacService {
   }
 
   @UniqueColumn({ table: Role, column: ["name"] })
-  async createRole(role: CreateRoleDto) {
+  async createRole(role: CreateRoleDtoType) {
     await this.roleRepository.insert(role);
   }
 
   @IdExist(Role)
-  async deleteRole(id: IdType) {
+  async deleteRole(id: number) {
     await this.roleRepository.delete(id);
   }
 
   @IdExist(Role)
   @UniqueColumn({ table: Role, column: ["name"], excludeCurrent: true })
-  async updateRole(role: UpdateRoleDto) {
+  async updateRole(role: UpdateRoleDtoType) {
     await this.roleRepository.update(role.id, role);
   }
 
-  async findRolePage(query: QueryRoleDtoType ) {
+  async findRole(query: QueryRoleDtoType) {
     let queryBuilder = this.roleRepository.createQueryBuilder("role");
     // 模糊查询、精确查询
     for (const [key, value] of Object.entries(query || {})) {
-      if (value && !key.startsWith('_')) {
+      if (value && !key.startsWith("_")) {
         let op = "=";
         let val = value;
         if (typeof value === "object") {
@@ -53,10 +53,55 @@ export class RbacService {
       }
     }
     // 排序
-    queryBuilder.orderBy(query._order)
+    const { _order } = query;
+    if (_order !== undefined && !Object.is(_order, {})) {
+      queryBuilder.orderBy(_order as OrderByType);
+    }
     // 分页处理
     const { _page = 1, _limit = 10 } = query || {};
     queryBuilder.offset((_page - 1) * _limit).limit(_limit);
     return queryBuilder.getManyAndCount();
   }
+
+  @UniqueColumn({ table: Resource, column: ["name"] })
+  async createResource(resource: CreateResourceDtoType) {
+    await this.resourceRepository.insert(resource);
+  }
+
+  @IdExist(Resource)
+  async deleteResource(id: number) {
+    await this.resourceRepository.delete(id);
+  }
+
+  @IdExist(Resource)
+  @UniqueColumn({ table: Role, column: ["name"], excludeCurrent: true })
+  async updateResource(resource: UpdateResourceDtoType) {
+    await this.resourceRepository.update(resource.id, resource);
+  }
+
+  async findResource(query: QueryResourceDto) {
+    let queryBuilder = this.resourceRepository.createQueryBuilder("resource");
+    // 模糊查询、精确查询
+    for (const [key, value] of Object.entries(query || {})) {
+      if (value && !key.startsWith("_")) {
+        let op = "=";
+        let val = value;
+        if (typeof value === "object") {
+          op = value.exact ? "=" : "like";
+          val = value.value;
+        }
+        queryBuilder = queryBuilder.andWhere(`role.${key} ${op} :${key}`, { [key]: op === "=" ? val : `%${val}%` });
+      }
+    }
+    // 排序
+    const { _order } = query;
+    if (_order !== undefined && !Object.is(_order, {})) {
+      queryBuilder.orderBy(_order as OrderByType);
+    }
+    // 分页处理
+    const { _page = 1, _limit = 10 } = query || {};
+    queryBuilder.offset((_page - 1) * _limit).limit(_limit);
+    return queryBuilder.getManyAndCount();
+  }
+
 }
