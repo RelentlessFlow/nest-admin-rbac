@@ -37,16 +37,16 @@ export interface QueryResourceDtoType extends Partial<QueryDtoType<ResourceType>
 }
 
 export class QueryResourceDto extends PageOptionsDto implements QueryResourceDtoType {
-  @ApiProperty({ description: "id", required: false })
+  @ApiProperty({ description: "id", required: false, type: 'number' })
   @IsOptional() @Validate(IsQueryProperty)
   id?: number | { equals: boolean; value: number; };
-  @ApiProperty({ description: "name", required: false })
+  @ApiProperty({ description: "name", required: false, type: 'string' })
   @IsOptional() @Validate(IsQueryProperty)
   name?: string | { equals: boolean; value: string; };
-  @ApiProperty({ description: "description", required: false })
+  @ApiProperty({ description: "description", required: false, type: 'string' })
   @IsOptional() @Validate(IsQueryProperty)
   description?: string | { equals: boolean; value: string; };
-  @ApiProperty({ description: "api", required: false })
+  @ApiProperty({ description: "api", required: false, type: 'string' })
   @IsOptional() @Validate(IsQueryProperty)
   api?: string | { equals: boolean; value: string; };
 }

@@ -43,7 +43,7 @@ export class RbacService {
     // 模糊查询、精确查询
     for (const [key, value] of Object.entries(query || {})) {
       if (value && !key.startsWith("_")) {
-        let op = "=";
+        let op = "like";
         let val = value;
         if (typeof value === "object") {
           op = value.exact ? "=" : "like";
@@ -84,7 +84,7 @@ export class RbacService {
     // 模糊查询、精确查询
     for (const [key, value] of Object.entries(query || {})) {
       if (value && !key.startsWith("_")) {
-        let op = "=";
+        let op = "like";
         let val = value;
         if (typeof value === "object") {
           op = value.exact ? "=" : "like";

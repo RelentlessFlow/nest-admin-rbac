@@ -3,7 +3,7 @@ import { ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface 
 @ValidatorConstraint({ name: 'is-query-property', async: false })
 export class IsQueryProperty implements ValidatorConstraintInterface {
   validate(pp: any, args: ValidationArguments) {
-    return typeof pp === 'string' || (pp?.equals !== undefined && pp?.value !== undefined)
+    return typeof pp === 'string' || (pp?.value !== undefined && typeof (pp?.equals || true) === 'boolean')
   }
 
   defaultMessage(args: ValidationArguments) {
