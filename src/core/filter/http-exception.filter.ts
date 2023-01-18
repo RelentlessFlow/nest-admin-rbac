@@ -5,6 +5,10 @@ import {
   HttpException,
 } from '@nestjs/common';
 
+/**
+ * HTTP异常过滤器
+ */
+
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {

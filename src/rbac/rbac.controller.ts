@@ -3,6 +3,7 @@ import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { RbacService } from "./rbac.service";
 import QueryRoleDto, { CreateRoleDto, UpdateRoleDto } from "./dto/role.dto";
 import { CreateResourceDto, QueryResourceDto, UpdateResourceDto } from "./dto/resource.dto";
+import { CreateMenuDto, QueryMenuDto, UpdateMenuDto } from "./dto/menu.dto";
 
 @ApiTags("RBAC接口")
 @Controller("rbac")
@@ -38,7 +39,7 @@ export class RbacController {
 
   @ApiOperation({ summary: "查询角色" })
   @Post("role.ts/query")
-  getRolePage(@Body() q: QueryRoleDto) {
+  getRoleQuery(@Body() q: QueryRoleDto) {
     return this.rbacService.findRole(q);
   }
 
@@ -68,8 +69,38 @@ export class RbacController {
 
   @ApiOperation({ summary: "查询接口资源" })
   @Post("resource/query")
-  getResourcePage(@Body() q: QueryResourceDto) {
+  getResourceQuery(@Body() q: QueryResourceDto) {
     return this.rbacService.findResource(q);
+  }
+
+  @ApiOperation({ summary: "添加菜单" })
+  @Post("menu")
+  createMenu(@Body() dto: CreateMenuDto) {
+    return this.rbacService.createMenu(dto);
+  }
+
+  @ApiOperation({ summary: "更新菜单" })
+  @Patch("menu")
+  updateMenu(@Body() dto: UpdateMenuDto) {
+    return this.rbacService.updateMenu(dto);
+  }
+
+  @ApiOperation({ summary: "删除接口资源" })
+  @Delete("menu")
+  deleteMenu(@Query("id") id: number) {
+    return this.rbacService.deleteMenu(id);
+  }
+
+  @ApiOperation({ summary: "查询接口资源" })
+  @Get("menu")
+  getMenu(@Query() q: QueryMenuDto) {
+    return this.rbacService.findMenu(q);
+  }
+
+  @ApiOperation({ summary: "查询接口资源" })
+  @Post("menu/query")
+  getMenuQuery(@Body() q: QueryMenuDto) {
+    return this.rbacService.findMenu(q);
   }
 
 }

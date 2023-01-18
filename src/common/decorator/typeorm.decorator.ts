@@ -2,6 +2,10 @@ import { BadRequestException } from "@nestjs/common";
 import { Not } from "typeorm";
 
 /**
+ * TypeORM 自定义装饰器
+ */
+
+/**
  * 检测字段的数据是否重复 例子：@UniqueColumn(table: User, column: [name, idCard])
  * @param { table:数据表, column：字段名, excludeCurrent 是否排除当前项 默认为false, idProp 当前表唯一主键的字段名 默认为id }
  * @constructor

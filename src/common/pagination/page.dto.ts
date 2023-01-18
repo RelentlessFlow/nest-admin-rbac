@@ -2,6 +2,10 @@ import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import { IsInt, IsOptional, Min, ValidateNested } from "class-validator";
 
+/**
+ * 分页查询DTO
+ */
+
 export type OrderByType = Record<string, "DESC" | "ASC">
 
 export interface PageOptionsDtoType {

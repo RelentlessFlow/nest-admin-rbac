@@ -14,7 +14,7 @@ export interface RoleType extends EntityType {
 export class Role extends EntityBase implements RoleType {
   @Column({
     name: "NAME",
-    comment: "名称",
+    comment: "角色名称",
     length: 10
   })
   @Index()
@@ -22,7 +22,7 @@ export class Role extends EntityBase implements RoleType {
 
   @Column({
     name: "DESC",
-    comment: "描述",
+    comment: "角色描述",
     length: 100,
     nullable: true
   })
@@ -57,7 +57,7 @@ export class Role extends EntityBase implements RoleType {
     name: "T_ROLE_MENU",
     joinColumn: {
       name: "ROLE_ID",
-      referencedColumnName: "id"
+      referencedColumnName: "id",
     },
     inverseJoinColumn: {
       name: "MENU_ID",

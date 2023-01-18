@@ -6,6 +6,10 @@ import {
 } from '@nestjs/common';
 import { map, Observable } from 'rxjs';
 
+/**
+ * 用于响应结果的格式处理
+ */
+
 interface Response<T> {
   data: T;
 }

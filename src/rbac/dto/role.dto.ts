@@ -8,11 +8,11 @@ import { IsQueryProperty } from "../../common/class-validator/role";
 export type CreateRoleDtoType = CreateType<RoleType>;
 
 export class CreateRoleDto implements CreateRoleDtoType {
-  @ApiProperty({ description: "名称", required: true, minLength: 2, maximum: 10 })
+  @ApiProperty({ description: "角色名称", required: true, minLength: 2, maximum: 10 })
   @IsNotEmpty() @IsString() @Length(2, 10)
   name: string;
 
-  @ApiProperty({ description: "介绍", required: false, minLength: 4, maximum: 100 })
+  @ApiProperty({ description: "角色介绍", required: false, minLength: 4, maximum: 100 })
   @IsOptional() @IsString() @Length(4, 100)
   description?: string;
 }
@@ -20,7 +20,7 @@ export class CreateRoleDto implements CreateRoleDtoType {
 export type UpdateRoleDtoType = UpdateType<RoleType>;
 
 export class UpdateRoleDto extends PartialType(CreateRoleDto) implements UpdateRoleDtoType {
-  @ApiProperty({ description: "ID", required: true })
+  @ApiProperty({ description: "唯一主键", required: true })
   @IsNotEmpty() @IsNumber()
   id: number;
 }
@@ -29,13 +29,13 @@ export interface QueryRoleDtoType extends Partial<QueryDtoType<RoleType>>, PageO
 }
 
 export default class QueryRoleDto extends PageOptionsDto implements QueryRoleDtoType {
-  @ApiProperty({ description: "id", required: false, type: 'number' })
+  @ApiProperty({ description: "唯一主键", required: false, type: 'number' })
   @IsOptional() @Validate(IsQueryProperty)
   id?: number | { equals: boolean; value: number; };
-  @ApiProperty({ description: "name", required: false, type: 'string' })
+  @ApiProperty({ description: "角色名称", required: false, type: 'string' })
   @IsOptional() @Validate(IsQueryProperty)
   name?: string | { equals: boolean; value: string; };
-  @ApiProperty({ description: "description", required: false, type: 'string' })
+  @ApiProperty({ description: "角色介绍", required: false, type: 'string' })
   @IsOptional() @Validate(IsQueryProperty)
   description?: string | { equals: boolean; value: string; };
 }

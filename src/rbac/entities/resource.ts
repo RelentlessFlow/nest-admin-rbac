@@ -23,28 +23,28 @@ export class Resource extends EntityBase implements ResourceType {
 
   @Column({
     name: "NAME",
-    comment: "名称",
+    comment: "接口名称",
     length: 20
   })
   name: string;
 
   @Column({
     name: "API",
-    comment: "接口",
+    comment: "接口地址",
     length: 100
   })
   api: string;
 
   @Column({
     name: "ACTION",
-    comment: "接口请求方式",
+    comment: "接口请求方式（JSON）",
     type: "simple-json"
   })
   action: ActionPossessType[];
 
   @Column({
     name: "DESC",
-    comment: "描述",
+    comment: "接口描述",
     length: 100,
     nullable: true
   })

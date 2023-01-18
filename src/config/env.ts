@@ -3,6 +3,10 @@ import * as path from 'path';
 // const dotenv = require('dotenv');
 const isProd = process.env.NODE_ENV === 'production';
 
+/**
+ * 用于配置文件.env生产环境和开发环境的切换处理
+ */
+
 function parseEnv() {
   const localEnv = path.resolve('.env');
   const prodEnv = path.resolve('.env.prod');

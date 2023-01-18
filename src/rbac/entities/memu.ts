@@ -14,7 +14,7 @@ export interface MenuType extends EntityType {
 export class Menu extends EntityBase implements MenuType {
   @Column({
     name: "NAME",
-    comment: "名称",
+    comment: "菜单名称",
     length: 20
   })
   @Index()
@@ -36,7 +36,7 @@ export class Menu extends EntityBase implements MenuType {
 
   @Column({
     name: "DESC",
-    comment: "描述",
+    comment: "菜单描述",
     length: 100,
     nullable: true
   })

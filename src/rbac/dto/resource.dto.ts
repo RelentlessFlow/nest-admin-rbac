@@ -14,10 +14,10 @@ export class CreateResourceDto implements CreateResourceDtoType {
   @ApiProperty({ description: "接口地址", required: true, minLength: 2, maximum: 100 })
   @IsNotEmpty() @IsString() @Length(2, 100)
   api: string;
-  @ApiProperty({ description: "请求方式（JSON）", required: true })
+  @ApiProperty({ description: "接口请求方式（JSON）", required: true })
   @IsNotEmpty() @ValidateNested()
   action: ActionPossessType[];
-  @ApiProperty({ description: "描述", required: true, minLength: 2, maximum: 100 })
+  @ApiProperty({ description: "接口描述", required: false, minLength: 2, maximum: 100 })
   @IsOptional() @IsString() @Length(2, 100)
   description?: string;
 }
@@ -28,25 +28,21 @@ export class UpdateResourceDto extends PartialType(CreateResourceDto) implements
   @ApiProperty({ description: "id", required: true })
   @IsNotEmpty() @IsNumber()
   id: number;
-  @ApiProperty({ description: "action", required: true })
-  @IsOptional() @ValidateNested()
-  action?: ActionPossessType[];
 }
 
-export interface QueryResourceDtoType extends Partial<QueryDtoType<ResourceType>>, PageOptionsDtoType {
-}
+export interface QueryResourceDtoType extends Partial<QueryDtoType<ResourceType>>, PageOptionsDtoType {}
 
 export class QueryResourceDto extends PageOptionsDto implements QueryResourceDtoType {
-  @ApiProperty({ description: "id", required: false, type: 'number' })
+  @ApiProperty({ description: "唯一主键", required: false, type: 'number' })
   @IsOptional() @Validate(IsQueryProperty)
   id?: number | { equals: boolean; value: number; };
-  @ApiProperty({ description: "name", required: false, type: 'string' })
+  @ApiProperty({ description: "接口名称", required: false, type: 'string' })
   @IsOptional() @Validate(IsQueryProperty)
   name?: string | { equals: boolean; value: string; };
-  @ApiProperty({ description: "description", required: false, type: 'string' })
+  @ApiProperty({ description: "接口描述", required: false, type: 'string' })
   @IsOptional() @Validate(IsQueryProperty)
   description?: string | { equals: boolean; value: string; };
-  @ApiProperty({ description: "api", required: false, type: 'string' })
+  @ApiProperty({ description: "接口地址", required: false, type: 'string' })
   @IsOptional() @Validate(IsQueryProperty)
   api?: string | { equals: boolean; value: string; };
 }

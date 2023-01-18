@@ -8,6 +8,7 @@ import { CreateRoleDtoType, QueryRoleDtoType, UpdateRoleDtoType } from "./dto/ro
 import { IdExist, UniqueColumn } from "../common/decorator/typeorm.decorator";
 import { OrderByType } from "../common/pagination/page.dto";
 import { CreateResourceDtoType, QueryResourceDto, UpdateResourceDtoType } from "./dto/resource.dto";
+import { QueryMenuDto } from "./dto/menu.dto";
 
 @Injectable()
 export class RbacService {
@@ -81,6 +82,47 @@ export class RbacService {
 
   async findResource(query: QueryResourceDto) {
     let queryBuilder = this.resourceRepository.createQueryBuilder("resource");
+    // 模糊查询、精确查询
+    for (const [key, value] of Object.entries(query || {})) {
+      if (value && !key.startsWith("_")) {
+        let op = "like";
+        let val = value;
+        if (typeof value === "object") {
+          op = value.exact ? "=" : "like";
+          val = value.value;
+        }
+        queryBuilder = queryBuilder.andWhere(`role.${key} ${op} :${key}`, { [key]: op === "=" ? val : `%${val}%` });
+      }
+    }
+    // 排序
+    const { _order } = query;
+    if (_order !== undefined && !Object.is(_order, {})) {
+      queryBuilder.orderBy(_order as OrderByType);
+    }
+    // 分页处理
+    const { _page = 1, _limit = 10 } = query || {};
+    queryBuilder.offset((_page - 1) * _limit).limit(_limit);
+    return queryBuilder.getManyAndCount();
+  }
+
+  @UniqueColumn({ table: Menu, column: ["name"] })
+  async createMenu(role: CreateRoleDtoType) {
+    await this.menuRepository.insert(role);
+  }
+
+  @IdExist(Menu)
+  async deleteMenu(id: number) {
+    await this.menuRepository.delete(id);
+  }
+
+  @IdExist(Menu)
+  @UniqueColumn({ table: Menu, column: ["name"], excludeCurrent: true })
+  async updateMenu(role: UpdateRoleDtoType) {
+    await this.menuRepository.update(role.id, role);
+  }
+
+  async findMenu(query: QueryMenuDto) {
+    let queryBuilder = this.menuRepository.createQueryBuilder("menu");
     // 模糊查询、精确查询
     for (const [key, value] of Object.entries(query || {})) {
       if (value && !key.startsWith("_")) {
