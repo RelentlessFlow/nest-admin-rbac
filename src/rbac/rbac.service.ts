@@ -1,14 +1,19 @@
 import { Injectable } from "@nestjs/common";
 import { InjectEntityManager, InjectRepository } from "@nestjs/typeorm";
 import { EntityManager, Repository } from "typeorm";
-import { Role } from "./entities/role";
-import { Resource } from "./entities/resource";
-import { Menu } from "./entities/memu";
+import { Role, RoleType } from "./entities/role";
+import { Resource, ResourceType } from "./entities/resource";
+import { Menu, MenuType } from "./entities/memu";
 import { CreateRoleDtoType, QueryRoleDtoType, UpdateRoleDtoType } from "./dto/role.dto";
 import { IdExist, UniqueColumn } from "../common/decorator/typeorm.decorator";
-import { OrderByType } from "../common/pagination/page.dto";
-import { CreateResourceDtoType, QueryResourceDto, UpdateResourceDtoType } from "./dto/resource.dto";
+import {
+  CreateResourceDtoType,
+  QueryResourceDtoType,
+  UpdateResourceDtoType
+} from "./dto/resource.dto";
 import { QueryMenuDto } from "./dto/menu.dto";
+import { createComplexQuery, createDeleteQuery } from "../common/utils/db";
+import { PageResponseDtoType } from "../common/pagination/page.dto";
 
 @Injectable()
 export class RbacService {
@@ -19,7 +24,8 @@ export class RbacService {
     private readonly resourceRepository: Repository<Resource>,
     @InjectRepository(Menu)
     private readonly menuRepository: Repository<Menu>,
-    @InjectEntityManager() private entityManager: EntityManager
+    @InjectEntityManager()
+    private entityManager: EntityManager
   ) {
   }
 
@@ -28,9 +34,8 @@ export class RbacService {
     await this.roleRepository.insert(role);
   }
 
-  @IdExist(Role)
-  async deleteRole(id: number) {
-    await this.roleRepository.delete(id);
+  deleteRole(id: number | number[]) {
+    return createDeleteQuery<RoleType>(id, this.roleRepository);
   }
 
   @IdExist(Role)
@@ -39,29 +44,10 @@ export class RbacService {
     await this.roleRepository.update(role.id, role);
   }
 
-  async findRole(query: QueryRoleDtoType) {
-    let queryBuilder = this.roleRepository.createQueryBuilder("role");
-    // 模糊查询、精确查询
-    for (const [key, value] of Object.entries(query || {})) {
-      if (value && !key.startsWith("_")) {
-        let op = "like";
-        let val = value;
-        if (typeof value === "object") {
-          op = value.exact ? "=" : "like";
-          val = value.value;
-        }
-        queryBuilder = queryBuilder.andWhere(`role.${key} ${op} :${key}`, { [key]: op === "=" ? val : `%${val}%` });
-      }
-    }
-    // 排序
-    const { _order } = query;
-    if (_order !== undefined && !Object.is(_order, {})) {
-      queryBuilder.orderBy(_order as OrderByType);
-    }
-    // 分页处理
-    const { _page = 1, _limit = 10 } = query || {};
-    queryBuilder.offset((_page - 1) * _limit).limit(_limit);
-    return queryBuilder.getManyAndCount();
+  async findRole(query: QueryRoleDtoType): Promise<PageResponseDtoType> {
+    const [data, total] = await createComplexQuery(this.roleRepository, query)
+      .getManyAndCount();
+    return { data, total, current: query.current, pageSize: query.pageSize }
   }
 
   @UniqueColumn({ table: Resource, column: ["name"] })
@@ -70,8 +56,8 @@ export class RbacService {
   }
 
   @IdExist(Resource)
-  async deleteResource(id: number) {
-    await this.resourceRepository.delete(id);
+  async deleteResource(id: number | number[]) {
+    return createDeleteQuery<ResourceType>(id, this.resourceRepository);
   }
 
   @IdExist(Resource)
@@ -80,29 +66,9 @@ export class RbacService {
     await this.resourceRepository.update(resource.id, resource);
   }
 
-  async findResource(query: QueryResourceDto) {
-    let queryBuilder = this.resourceRepository.createQueryBuilder("resource");
-    // 模糊查询、精确查询
-    for (const [key, value] of Object.entries(query || {})) {
-      if (value && !key.startsWith("_")) {
-        let op = "like";
-        let val = value;
-        if (typeof value === "object") {
-          op = value.exact ? "=" : "like";
-          val = value.value;
-        }
-        queryBuilder = queryBuilder.andWhere(`role.${key} ${op} :${key}`, { [key]: op === "=" ? val : `%${val}%` });
-      }
-    }
-    // 排序
-    const { _order } = query;
-    if (_order !== undefined && !Object.is(_order, {})) {
-      queryBuilder.orderBy(_order as OrderByType);
-    }
-    // 分页处理
-    const { _page = 1, _limit = 10 } = query || {};
-    queryBuilder.offset((_page - 1) * _limit).limit(_limit);
-    return queryBuilder.getManyAndCount();
+  async findResource(query: QueryResourceDtoType) {
+    return createComplexQuery(this.resourceRepository, query)
+      .getManyAndCount();
   }
 
   @UniqueColumn({ table: Menu, column: ["name"] })
@@ -111,8 +77,8 @@ export class RbacService {
   }
 
   @IdExist(Menu)
-  async deleteMenu(id: number) {
-    await this.menuRepository.delete(id);
+  async deleteMenu(id: number | number[]) {
+    return createDeleteQuery<Menu>(id, this.menuRepository);
   }
 
   @IdExist(Menu)
@@ -122,28 +88,8 @@ export class RbacService {
   }
 
   async findMenu(query: QueryMenuDto) {
-    let queryBuilder = this.menuRepository.createQueryBuilder("menu");
-    // 模糊查询、精确查询
-    for (const [key, value] of Object.entries(query || {})) {
-      if (value && !key.startsWith("_")) {
-        let op = "like";
-        let val = value;
-        if (typeof value === "object") {
-          op = value.exact ? "=" : "like";
-          val = value.value;
-        }
-        queryBuilder = queryBuilder.andWhere(`role.${key} ${op} :${key}`, { [key]: op === "=" ? val : `%${val}%` });
-      }
-    }
-    // 排序
-    const { _order } = query;
-    if (_order !== undefined && !Object.is(_order, {})) {
-      queryBuilder.orderBy(_order as OrderByType);
-    }
-    // 分页处理
-    const { _page = 1, _limit = 10 } = query || {};
-    queryBuilder.offset((_page - 1) * _limit).limit(_limit);
-    return queryBuilder.getManyAndCount();
+    return createComplexQuery(this.menuRepository, query)
+      .getManyAndCount();
   }
 
 }

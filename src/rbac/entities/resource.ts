@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToMany } from "typeorm";
-import { EntityBase, EntityType } from "../../common/entity/entity";
+import { EntityBase, EntityType } from "../../common/base/entity";
 import { Role, RoleType } from "./role";
 
 export type ActionType = "get" | "post" | "delete" | "put" | "patch" | "head";
@@ -15,10 +15,10 @@ export interface ResourceType extends EntityType {
   api: string;
   action: ActionPossessType[];
   description?: string;
-  role: RoleType[];
+  role?: RoleType[];
 }
 
-@Entity("T_RESOURCE")
+@Entity("RESOURCE")
 export class Resource extends EntityBase implements ResourceType {
 
   @Column({
@@ -26,24 +26,24 @@ export class Resource extends EntityBase implements ResourceType {
     comment: "接口名称",
     length: 20
   })
-  name: string;
+  name: string = '';
 
   @Column({
     name: "API",
     comment: "接口地址",
     length: 100
   })
-  api: string;
+  api: string = '';
 
   @Column({
     name: "ACTION",
     comment: "接口请求方式（JSON）",
     type: "simple-json"
   })
-  action: ActionPossessType[];
+  action: ActionPossessType[] = [];
 
   @Column({
-    name: "DESC",
+    name: "DESCRIPTION",
     comment: "接口描述",
     length: 100,
     nullable: true
@@ -51,5 +51,5 @@ export class Resource extends EntityBase implements ResourceType {
   description?: string;
 
   @ManyToMany(() => Role, (role) => role.menu, {})
-  role: Role[];
+  role: Role[] = undefined;
 }

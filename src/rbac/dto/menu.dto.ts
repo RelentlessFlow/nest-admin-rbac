@@ -1,4 +1,4 @@
-import { CreateType, QueryDtoType, UpdateType } from "../../common/type/type.enhance";
+import { BaseDeleteDtoType, CreateType, QueryDtoType, UpdateType } from "../../common/type/dto";
 import { ActionPossessType, ResourceType } from "../entities/resource";
 import { ApiProperty, PartialType } from "@nestjs/swagger";
 import {
@@ -14,8 +14,9 @@ import {
 import { PageOptionsDto, PageOptionsDtoType } from "../../common/pagination/page.dto";
 import { IsQueryProperty } from "../../common/class-validator/role";
 import { MenuType } from "../entities/memu";
+import { BaseDeleteDto } from "../../common/base/dto";
 
-export type CreateMenuDtoType = CreateType<MenuType>
+export interface CreateMenuDtoType extends CreateType<MenuType> {}
 
 export class CreateMenuDto implements CreateMenuDtoType {
   @ApiProperty({ description: "菜单名称", required: true, minLength: 2, maximum: 20 })
@@ -32,7 +33,7 @@ export class CreateMenuDto implements CreateMenuDtoType {
   description?: string;
 }
 
-export type UpdateMenuDtoType = UpdateType<MenuType>
+export interface UpdateMenuDtoType extends UpdateType<MenuType> {}
 
 export class UpdateMenuDto extends  PartialType(CreateMenuDto) implements UpdateMenuDtoType {
   @ApiProperty({ description: "唯一主键", required: true })
@@ -40,7 +41,7 @@ export class UpdateMenuDto extends  PartialType(CreateMenuDto) implements Update
   id: number;
 }
 
-export interface QueryMenuDtoType extends Partial<QueryDtoType<MenuType>>, PageOptionsDtoType {}
+export interface QueryMenuDtoType extends QueryDtoType<MenuType> {}
 
 export class QueryMenuDto extends PageOptionsDto implements QueryMenuDtoType {
   @ApiProperty({ description: "唯一主键", required: false, type: 'number' })
@@ -59,3 +60,7 @@ export class QueryMenuDto extends PageOptionsDto implements QueryMenuDtoType {
   @IsOptional() @Validate(IsQueryProperty)
   description?: string | { equals: boolean; value: string; };
 }
+
+
+export interface DeleteMenuDtoType extends BaseDeleteDtoType {}
+export class DeleteMenuDto extends BaseDeleteDto implements DeleteMenuDtoType {}

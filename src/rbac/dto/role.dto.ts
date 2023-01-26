@@ -1,9 +1,15 @@
 import { RoleType } from "../entities/role";
-import { CreateType, QueryDtoType, UpdateType } from "../../common/type/type.enhance";
-import { IsNotEmpty, IsNumber, IsOptional, IsString, Length, Validate } from "class-validator";
+import {
+  BaseDeleteDtoType,
+  CreateType,
+  QueryDtoType,
+  UpdateType
+} from "../../common/type/dto";
+import { IsNotEmpty, IsNumber, IsOptional, IsString, Length, Validate, ValidateNested } from "class-validator";
 import { ApiProperty, PartialType } from "@nestjs/swagger";
 import { PageOptionsDto, PageOptionsDtoType } from "../../common/pagination/page.dto";
 import { IsQueryProperty } from "../../common/class-validator/role";
+import { BaseDeleteDto } from "../../common/base/dto";
 
 export type CreateRoleDtoType = CreateType<RoleType>;
 
@@ -25,10 +31,9 @@ export class UpdateRoleDto extends PartialType(CreateRoleDto) implements UpdateR
   id: number;
 }
 
-export interface QueryRoleDtoType extends Partial<QueryDtoType<RoleType>>, PageOptionsDtoType {
-}
+export interface QueryRoleDtoType extends QueryDtoType<RoleType> {} {}
 
-export default class QueryRoleDto extends PageOptionsDto implements QueryRoleDtoType {
+export class QueryRoleDto extends PageOptionsDto implements QueryRoleDtoType {
   @ApiProperty({ description: "唯一主键", required: false, type: 'number' })
   @IsOptional() @Validate(IsQueryProperty)
   id?: number | { equals: boolean; value: number; };
@@ -39,3 +44,6 @@ export default class QueryRoleDto extends PageOptionsDto implements QueryRoleDto
   @IsOptional() @Validate(IsQueryProperty)
   description?: string | { equals: boolean; value: string; };
 }
+
+export interface DeleteRoleDtoType extends BaseDeleteDtoType {}
+export class DeleteRoleDto extends BaseDeleteDto implements DeleteRoleDtoType {}

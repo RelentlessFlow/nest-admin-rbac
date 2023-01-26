@@ -1,13 +1,11 @@
+// HTTP异常过滤器
 import {
   ArgumentsHost,
   Catch,
   ExceptionFilter,
   HttpException,
 } from '@nestjs/common';
-
-/**
- * HTTP异常过滤器
- */
+import { HttpResponseType } from "../../common/type/res";
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -31,10 +29,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
       ? exception.message
       : `${status >= 500 ? 'Service Error' : 'Client Error'}`;
     const errorResponse = {
-      data: {},
+      data: exception.name,
       message: validMessage || message,
-      code: -1,
-    };
+      success: false,
+    } as HttpResponseType;
 
     // 设置返回的状态码， 请求头，发送错误信息
     response.status(status);

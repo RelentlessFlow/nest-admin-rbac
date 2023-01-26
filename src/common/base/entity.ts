@@ -1,9 +1,7 @@
+// TypeORM 基础实体类
 import { CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { MapQueryFormat } from "../type/type.enhance";
 
-/**
- * TypeORM 基础实体类
- */
+
 
 export interface EntityType {
   id: number;
@@ -13,17 +11,17 @@ export interface EntityType {
 
 export class EntityBase {
   @PrimaryGeneratedColumn({ name: "ID" })
-  id: number;
+  id: number = 0;
 
   @CreateDateColumn({
     name: "CREATE_TIME",
     type: "timestamp"
   })
-  createTime: Date;
+  createTime: Date = null;
 
   @UpdateDateColumn({
     name: "UPDATE_TIME",
     type: "timestamp"
   })
-  updateTime: Date;
+  updateTime: Date = null;
 }

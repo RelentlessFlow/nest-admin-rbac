@@ -5,10 +5,10 @@ import { ConfigService, ConfigModule } from '@nestjs/config';
 import envConfig from './config/env';
 import { AccessControlModule, RolesBuilder } from 'nest-access-control';
 import { RbacModule } from './rbac/rbac.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: [envConfig.path] }),
-    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
@@ -33,6 +33,5 @@ import { RbacModule } from './rbac/rbac.module';
     RbacModule,
   ],
   controllers: [AppController],
-  providers: [],
 })
 export class AppModule {}

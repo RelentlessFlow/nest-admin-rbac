@@ -7,7 +7,9 @@ import { Menu } from "./entities/memu";
 import { RbacController } from "./rbac.controller";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Role, Resource, Menu])],
+  imports: [
+    TypeOrmModule.forFeature([Role, Resource, Menu])
+  ],
   controllers: [RbacController],
   providers: [RbacService],
 })

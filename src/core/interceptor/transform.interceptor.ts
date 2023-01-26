@@ -1,3 +1,4 @@
+// 用于全局响应结果的格式处理
 import {
   CallHandler,
   ExecutionContext,
@@ -5,27 +6,27 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { map, Observable } from 'rxjs';
+import { HttpResponseType } from "../../common/type/res";
 
-/**
- * 用于响应结果的格式处理
- */
-
-interface Response<T> {
-  data: T;
-}
 @Injectable()
-export class TransformInterceptor<T>
-  implements NestInterceptor<T, Response<T>>
+export class TransformInterceptor
+  implements NestInterceptor
 {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
-      map((data) => {
+      map((_data) => {
+        const def = { message: 'success', success: true } as Omit<HttpResponseType, 'data'>
+        // 处理拦截器增加的字段
+        const op = _data._option ?? {}
+        delete _data['_option']
+        // 如果data中不包含data，则为一般情况，做对象化处理 { data: {} }
+        _data = _data.data ? _data : { data: _data }
+        // 合并默认参数
         return {
-          data,
-          message: 'success',
-          code: 1,
-        };
+          ...def, ...op, ..._data,
+        } as HttpResponseType;
       }),
     );
   }
 }
+

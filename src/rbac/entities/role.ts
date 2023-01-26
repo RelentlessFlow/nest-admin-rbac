@@ -1,16 +1,16 @@
 import { Column, Entity, Index, JoinTable, ManyToMany } from "typeorm";
-import { EntityBase, EntityType } from "../../common/entity/entity";
+import { EntityBase, EntityType } from "../../common/base/entity";
 import { Resource, ResourceType } from "./resource";
 import { Menu, MenuType } from "./memu";
 
 export interface RoleType extends EntityType {
   name: string;
   description?: string;
-  resource: ResourceType[];
-  menu: MenuType[];
+  resource?: ResourceType[];
+  menu?: MenuType[];
 }
 
-@Entity("T_ROLE")
+@Entity("ROLE")
 export class Role extends EntityBase implements RoleType {
   @Column({
     name: "NAME",
@@ -18,15 +18,15 @@ export class Role extends EntityBase implements RoleType {
     length: 10
   })
   @Index()
-  name: string;
+  name: string = '';
 
   @Column({
-    name: "DESC",
+    name: "DES",
     comment: "角色描述",
     length: 100,
     nullable: true
   })
-  description?: string;
+  description?: string = undefined;
 
   @ManyToMany(() => Resource, (resource) => resource.role, {
     createForeignKeyConstraints: true,
@@ -35,7 +35,7 @@ export class Role extends EntityBase implements RoleType {
     onDelete: "NO ACTION"
   })
   @JoinTable({
-    name: "T_ROLE_RESOURCE",
+    name: "ROLE_RESOURCE",
     joinColumn: {
       name: "ROLE_ID",
       referencedColumnName: "id"
@@ -45,7 +45,7 @@ export class Role extends EntityBase implements RoleType {
       referencedColumnName: "id"
     }
   })
-  resource: Resource[];
+  resource?: Resource[] = undefined;
 
   @ManyToMany(() => Menu, (menu) => menu.role, {
     createForeignKeyConstraints: true,
@@ -54,7 +54,7 @@ export class Role extends EntityBase implements RoleType {
     onDelete: "NO ACTION"
   })
   @JoinTable({
-    name: "T_ROLE_MENU",
+    name: "ROLE_MENU",
     joinColumn: {
       name: "ROLE_ID",
       referencedColumnName: "id",
@@ -64,5 +64,5 @@ export class Role extends EntityBase implements RoleType {
       referencedColumnName: "id"
     }
   })
-  menu: Menu[];
+  menu?: Menu[] = undefined;
 }

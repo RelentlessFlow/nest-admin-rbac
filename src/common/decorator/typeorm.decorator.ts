@@ -1,9 +1,6 @@
+// TypeORM 自定义装饰器
 import { BadRequestException } from "@nestjs/common";
 import { Not } from "typeorm";
-
-/**
- * TypeORM 自定义装饰器
- */
 
 /**
  * 检测字段的数据是否重复 例子：@UniqueColumn(table: User, column: [name, idCard])
@@ -41,10 +38,11 @@ export function ExistColumn({ table, column }) {
   return function(target: any, propertyName: string, descriptor: PropertyDescriptor) {
     const originalMethod = descriptor.value;
     descriptor.value = async function(...args: any[]) {
-      const role = args[0];
-      if(role[column]) {
-        const existingRole = await this.entityManager.findOne(table, { where: { [column]: role[column] } });
-        if (!existingRole) {
+      const value = args[0];
+      let t = new table()
+      if(value) {
+        const existing = await this.entityManager.findOne(table, { where: { [column]: value } });
+        if (!existing) {
           throw new BadRequestException(`${column}不存在！`);
         }
       }
