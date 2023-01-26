@@ -6,7 +6,6 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { map, Observable } from 'rxjs';
-import { HttpResponseType } from "../../common/type/res";
 
 @Injectable()
 export class TransformInterceptor

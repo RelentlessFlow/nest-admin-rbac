@@ -1,5 +1,5 @@
 import { Column, Entity, Index, JoinTable, ManyToMany } from "typeorm";
-import { EntityBase, EntityType } from "../../common/base/entity";
+import { EntityBase } from "../../common/base/entity";
 import { Resource, ResourceType } from "./resource";
 import { Menu, MenuType } from "./memu";
 

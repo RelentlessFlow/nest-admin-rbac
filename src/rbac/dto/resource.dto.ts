@@ -1,14 +1,9 @@
-import { BaseDeleteDtoType, CreateType, QueryDtoType, UpdateType } from "../../common/type/dto";
 import { ActionPossessType, ResourceType } from "../entities/resource";
 import { ApiProperty, PartialType } from "@nestjs/swagger";
 import { IsNotEmpty, IsNumber, IsOptional, IsString, Length, Validate, ValidateNested } from "class-validator";
-import { PageOptionsDto, PageOptionsDtoType } from "../../common/pagination/page.dto";
+import { PageOptionsDto } from "../../common/pagination/page.dto";
 import { IsQueryProperty } from "../../common/class-validator/role";
 import { BaseDeleteDto } from "../../common/base/dto";
-
-export interface CreateResourceDtoType extends CreateType<ResourceType>  {
-  action: ActionPossessType[]
-}
 
 export class CreateResourceDto implements CreateResourceDtoType {
   @ApiProperty({ description: "接口名称", required: true, minLength: 2, maximum: 20 })
@@ -25,17 +20,13 @@ export class CreateResourceDto implements CreateResourceDtoType {
   description?: string;
 }
 
-export interface UpdateResourceDtoType extends UpdateType<ResourceType> {
-  action?: ActionPossessType[]
-}
+export class DeleteResourceDto extends BaseDeleteDto implements DeleteResourceDtoType {}
 
 export class UpdateResourceDto extends PartialType(CreateResourceDto) implements UpdateResourceDtoType {
   @ApiProperty({ description: "id", required: true })
   @IsNotEmpty() @IsNumber()
   id: number;
 }
-
-export interface QueryResourceDtoType extends QueryDtoType<ResourceType> {}
 
 export class QueryResourceDto extends PageOptionsDto implements QueryResourceDtoType {
   @ApiProperty({ description: "唯一主键", required: false, type: 'number' })
@@ -51,7 +42,3 @@ export class QueryResourceDto extends PageOptionsDto implements QueryResourceDto
   @IsOptional() @Validate(IsQueryProperty)
   api?: string | { equals: boolean; value: string; };
 }
-
-
-export interface DeleteResourceDtoType extends BaseDeleteDtoType {}
-export class DeleteResourceDto extends BaseDeleteDto implements DeleteResourceDtoType {}

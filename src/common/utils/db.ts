@@ -1,13 +1,5 @@
 // 数据库工具类
-import { SelectQueryBuilder } from "typeorm/query-builder/SelectQueryBuilder";
-import { OrderByType } from "../pagination/page.dto";
-import { QueryDtoType } from "../type/dto";
 import { Repository } from "typeorm";
-import { HttpResponseType } from "../type/res";
-import { EntityBase, EntityType } from "../base/entity";
-import { classToPlain, instanceToPlain } from "class-transformer";
-import { Role } from "../../rbac/entities/role";
-import { request } from "express";
 
 export function createComplexQuery(repository: Repository<any>, query: QueryDtoType<any>) {
   let queryBuilder = repository.createQueryBuilder('query')

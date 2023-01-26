@@ -1,5 +1,5 @@
 import { Column, Entity, Index, ManyToMany } from "typeorm";
-import { EntityBase, EntityType } from "../../common/base/entity";
+import { EntityBase } from "../../common/base/entity";
 import { Role, RoleType } from "./role";
 
 export interface MenuType extends EntityType {

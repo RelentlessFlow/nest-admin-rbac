@@ -1,5 +1,5 @@
 // HTTP响应类型
-export interface HttpResponseType {
+declare type HttpResponseType = {
   data: any;
   message: string;
   success: boolean;

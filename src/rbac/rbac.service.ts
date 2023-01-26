@@ -3,17 +3,10 @@ import { InjectEntityManager, InjectRepository } from "@nestjs/typeorm";
 import { EntityManager, Repository } from "typeorm";
 import { Role, RoleType } from "./entities/role";
 import { Resource, ResourceType } from "./entities/resource";
-import { Menu, MenuType } from "./entities/memu";
-import { CreateRoleDtoType, QueryRoleDtoType, UpdateRoleDtoType } from "./dto/role.dto";
+import { Menu } from "./entities/memu";
 import { IdExist, UniqueColumn } from "../common/decorator/typeorm.decorator";
-import {
-  CreateResourceDtoType,
-  QueryResourceDtoType,
-  UpdateResourceDtoType
-} from "./dto/resource.dto";
 import { QueryMenuDto } from "./dto/menu.dto";
 import { createComplexQuery, createDeleteQuery } from "../common/utils/db";
-import { PageResponseDtoType } from "../common/pagination/page.dto";
 
 @Injectable()
 export class RbacService {

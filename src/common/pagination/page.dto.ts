@@ -3,15 +3,6 @@ import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import { IsInt, IsOptional, Min, ValidateNested } from "class-validator";
 
-
-export type OrderByType = Record<string, "DESC" | "ASC">
-
-export interface PageOptionsDtoType {
-  readonly pageSize?: number;
-  readonly current?: number;
-  readonly order?: OrderByType;
-}
-
 export class PageOptionsDto implements PageOptionsDtoType{
   @ApiProperty({ description: "每页包含数量", required: false, default: 10 })
   @IsOptional() @Type(() => Number) @IsInt() @Min(1)
@@ -23,11 +14,4 @@ export class PageOptionsDto implements PageOptionsDtoType{
   @ApiProperty({ description: "排序依据", required: false })
   @IsOptional() @ValidateNested()
   readonly order: OrderByType = {};
-}
-
-export type PageResponseDtoType = {
-  data: any;
-  total: number,
-  current: number,
-  pageSize: number
 }
