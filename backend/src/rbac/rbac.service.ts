@@ -13,7 +13,7 @@ import {
   PageResponseDtoType, QueryResourceDtoType,
   QueryRoleDtoType, ResourceType, UpdateResourceDtoType,
   UpdateRoleDtoType
-} from "../../type";
+} from "typelibrary";
 
 @Injectable()
 export class RbacService {

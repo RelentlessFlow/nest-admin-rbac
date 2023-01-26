@@ -4,7 +4,7 @@ import {FormattedMessage, useIntl, useModel} from "@umijs/max";
 import {ModalForm, PageContainer, ProColumns, ProFormText, ProFormTextArea, ProTable} from "@ant-design/pro-components";
 import request from "umi-request";
 import {PlusOutlined} from "@ant-design/icons";
-import RoleItem = AdminApi.RoleItem;
+import {FilterComplex, RoleType} from "typelibrary";
 
 // 新建数据模态框
 const CreateModal: React.FC = () => {
@@ -58,7 +58,7 @@ const QueryTable: React.FC = () => {
   // 国际化
   const intl = useIntl();
   const messageServerException = intl.formatMessage({id: 'page.api.error', defaultMessage: 'server exception.'})
-  const columns: ProColumns<RoleItem>[] = [{
+  const columns: ProColumns<RoleType>[] = [{
     dataIndex: 'index', valueType: "indexBorder", width: 48
   }, {
     dataIndex: 'id', title: 'ID'
@@ -94,7 +94,7 @@ const QueryTable: React.FC = () => {
   const [pagination, setPagination] = useState({
     pageSize: 10, current: 1
   })
-  return (<ProTable<RoleItem>
+  return (<ProTable<RoleType>
     headerTitle={"Role Table"}
     columns={columns}
     actionRef={tableRef}

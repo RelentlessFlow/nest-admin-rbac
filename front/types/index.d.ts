@@ -1,7 +1,7 @@
 import '../../backend/type/res'
-import '../../backend/type/enhance'
-import '../../backend/type/entity'
-import '../../backend/type/dto'
+import '../../type/enhance'
+import '../../type/entity'
+import '../../type/dto'
 export namespace API {
 
 }

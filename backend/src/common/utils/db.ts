@@ -1,6 +1,6 @@
 // 数据库工具类
 import { Repository } from "typeorm";
-import {HttpResponseType, QueryDtoType} from "../../../type";
+import {HttpResponseType, QueryDtoType} from "typelibrary";
 
 export function createComplexQuery(repository: Repository<any>, query: QueryDtoType<any>) {
   let queryBuilder = repository.createQueryBuilder('query')

@@ -1,5 +1,5 @@
 {
-  "name": "rbac-nest",
+  "name": "backend",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -34,6 +34,8 @@
     "rdi": "^1.0.3",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
+    "type": "^2.7.2",
+    "typelibrary": "workspace:^1.0.0",
     "typeorm": "^0.3.11"
   },
   "devDependencies": {

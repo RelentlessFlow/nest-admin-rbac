@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToMany } from "typeorm";
 import { EntityBase } from "../../common/base/entity";
 import { Role } from "./role";
-import {ActionPossessType, ResourceType} from "../../../type";
+import {ActionPossessType, ResourceType} from "typelibrary";
 
 @Entity("RESOURCE")
 export class Resource extends EntityBase implements ResourceType {

@@ -12,7 +12,7 @@ import {
 import { PageOptionsDto } from "../../common/pagination/page.dto";
 import { IsQueryProperty } from "../../common/class-validator/role";
 import { BaseDeleteDto } from "../../common/base/dto";
-import {CreateMenuDtoType, DeleteMenuDtoType, QueryMenuDtoType, UpdateMenuDtoType} from "../../../type";
+import {CreateMenuDtoType, DeleteMenuDtoType, QueryMenuDtoType, UpdateMenuDtoType} from "typelibrary";
 
 export class CreateMenuDto implements CreateMenuDtoType {
   @ApiProperty({ description: "菜单名称", required: true, minLength: 2, maximum: 20 })

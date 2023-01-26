@@ -1,5 +1,5 @@
 {
-  "name": "ant-design-pro",
+  "name": "front",
   "version": "6.0.0",
   "private": true,
   "description": "An out-of-box UI solution for enterprise applications",
@@ -15,8 +15,8 @@
     "lint": "npm run lint:js && npm run lint:prettier && npm run tsc",
     "lint-staged": "lint-staged",
     "lint-staged:js": "eslint --ext .js,.jsx,.ts,.tsx ",
-    "lint:fix": "eslint --fix --cache --ext .js,.jsx,.ts,.tsx --format=pretty ./src ",
-    "lint:js": "eslint --cache --ext .js,.jsx,.ts,.tsx --format=pretty ./src",
+    "lint:fix": "eslint --fix --cache --ext .js,.jsx,.ts,.tsx --format=pretty src ",
+    "lint:js": "eslint --cache --ext .js,.jsx,.ts,.tsx --format=pretty src",
     "lint:prettier": "prettier -c --write \"**/**.{js,jsx,tsx,ts,less,md,json}\" --end-of-line auto",
     "openapi": "max openapi",
     "prepare": "husky install",
@@ -61,6 +61,7 @@
     "react-dev-inspector": "^1.8.1",
     "react-dom": "^18.0.0",
     "react-helmet-async": "^1.3.0",
+    "typelibrary": "workspace:^1.0.0",
     "umi-request": "^1.4.0"
   },
   "devDependencies": {

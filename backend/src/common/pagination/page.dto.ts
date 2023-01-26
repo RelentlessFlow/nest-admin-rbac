@@ -2,7 +2,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import { IsInt, IsOptional, Min, ValidateNested } from "class-validator";
-import {OrderByType, PageOptionsDtoType} from "../../../type/dto/pagination";
+import {OrderByType, PageOptionsDtoType} from "typelibrary/dto/pagination";
 
 export class PageOptionsDto implements PageOptionsDtoType{
   @ApiProperty({ description: "每页包含数量", required: false, default: 10 })
