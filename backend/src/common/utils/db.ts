@@ -2,7 +2,7 @@
 import { Repository } from "typeorm";
 import {HttpResponseType, QueryDtoType} from "typelibrary";
 
-export function createComplexQuery(repository: Repository<any>, query: QueryDtoType<any>) {
+export function createComplexQuery<T>(repository: Repository<T>, query: QueryDtoType<any>) {
   let queryBuilder = repository.createQueryBuilder('query')
   // 模糊查询、精确查询
   const {tableName, columns} = repository.metadata

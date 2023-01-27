@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectEntityManager, InjectRepository } from "@nestjs/typeorm";
 import { EntityManager, Repository } from "typeorm";
-import { Role, RoleType } from "./entities/role";
+import { Role } from "./entities/role";
 import { Resource } from "./entities/resource";
 import { Menu } from "./entities/memu";
 import { IdExist, UniqueColumn } from "../common/decorator/typeorm.decorator";
@@ -10,8 +10,12 @@ import { createComplexQuery, createDeleteQuery } from "../common/utils/db";
 import {
   CreateResourceDtoType,
   CreateRoleDtoType,
-  PageResponseDtoType, QueryResourceDtoType,
-  QueryRoleDtoType, ResourceType, UpdateResourceDtoType,
+  PageResponseDtoType, 
+  QueryResourceDtoType,
+  QueryRoleDtoType, 
+  ResourceType, 
+  RoleType, 
+  UpdateResourceDtoType,
   UpdateRoleDtoType
 } from "typelibrary";
 
@@ -31,7 +35,7 @@ export class RbacService {
 
   @UniqueColumn({ table: Role, column: ["name"] })
   async createRole(role: CreateRoleDtoType) {
-    await this.roleRepository.insert(role);
+    return await this.roleRepository.insert(role);
   }
 
   deleteRole(id: number | number[]) {
@@ -41,10 +45,10 @@ export class RbacService {
   @IdExist(Role)
   @UniqueColumn({ table: Role, column: ["name"], excludeCurrent: true })
   async updateRole(role: UpdateRoleDtoType) {
-    await this.roleRepository.update(role.id, role);
+    return await this.roleRepository.update(role.id, role);
   }
 
-  async findRole(query: QueryRoleDtoType): Promise<PageResponseDtoType> {
+  async findRole(query: QueryRoleDtoType): Promise<PageResponseDtoType<Role[]>> {
     const [data, total] = await createComplexQuery(this.roleRepository, query)
       .getManyAndCount();
     return { data, total, current: query.current, pageSize: query.pageSize }
@@ -52,7 +56,7 @@ export class RbacService {
 
   @UniqueColumn({ table: Resource, column: ["name"] })
   async createResource(resource: CreateResourceDtoType) {
-    await this.resourceRepository.insert(resource);
+    return await this.resourceRepository.insert(resource);
   }
 
   @IdExist(Resource)
@@ -63,17 +67,18 @@ export class RbacService {
   @IdExist(Resource)
   @UniqueColumn({ table: Role, column: ["name"], excludeCurrent: true })
   async updateResource(resource: UpdateResourceDtoType) {
-    await this.resourceRepository.update(resource.id, resource);
+    return await this.resourceRepository.update(resource.id, resource);
   }
 
-  async findResource(query: QueryResourceDtoType) {
-    return createComplexQuery(this.resourceRepository, query)
+  async findResource(query: QueryResourceDtoType): Promise<PageResponseDtoType<Resource[]>> {
+    const [data, total] = await createComplexQuery(this.resourceRepository, query)
       .getManyAndCount();
+    return { data, total, current: query.current, pageSize: query.pageSize }
   }
 
   @UniqueColumn({ table: Menu, column: ["name"] })
   async createMenu(role: CreateRoleDtoType) {
-    await this.menuRepository.insert(role);
+    return await this.menuRepository.insert(role);
   }
 
   @IdExist(Menu)
@@ -84,12 +89,13 @@ export class RbacService {
   @IdExist(Menu)
   @UniqueColumn({ table: Menu, column: ["name"], excludeCurrent: true })
   async updateMenu(role: UpdateRoleDtoType) {
-    await this.menuRepository.update(role.id, role);
+    return await this.menuRepository.update(role.id, role);
   }
 
-  async findMenu(query: QueryMenuDto) {
-    return createComplexQuery(this.menuRepository, query)
+  async findMenu(query: QueryMenuDto): Promise<PageResponseDtoType<Menu[]>> {
+    const [data, total] = await createComplexQuery(this.menuRepository, query)
       .getManyAndCount();
+    return { data, total, current: query.current, pageSize: query.pageSize }
   }
 
 }

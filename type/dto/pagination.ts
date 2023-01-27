@@ -6,8 +6,8 @@ export type PageOptionsDtoType = {
   readonly order?: OrderByType;
 }
 
-export type PageResponseDtoType = {
-  data: any;
+export type PageResponseDtoType<T> = {
+  data: T;
   total: number,
   current: number,
   pageSize: number

@@ -1,4 +1,3 @@
-import { RoleType } from "../entities/role";
 import { IsNotEmpty, IsNumber, IsOptional, IsString, Length, Validate, ValidateNested } from "class-validator";
 import { ApiProperty, PartialType } from "@nestjs/swagger";
 import { PageOptionsDto } from "../../common/pagination/page.dto";
