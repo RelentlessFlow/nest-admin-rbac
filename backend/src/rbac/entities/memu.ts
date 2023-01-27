@@ -1,7 +1,7 @@
 import { Column, Entity, Index, ManyToMany } from "typeorm";
 import { Role } from "./role";
 import {EntityBase} from "../../common/base/entity";
-import { MenuType } from "typelibrary";
+import {MenuType} from "typelibrary/entity";
 
 @Entity("MENU")
 export class Menu extends EntityBase implements MenuType {

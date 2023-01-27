@@ -1,4 +1,9 @@
-export type OrderByType = Record<string, "DESC" | "ASC">
+enum OrderEnum {
+  DESC = 'DESC',
+  ASC = 'ASC'
+}
+
+export type OrderByType = Record<string, OrderEnum.DESC | OrderEnum.ASC>
 
 export type PageOptionsDtoType = {
   readonly pageSize?: number;

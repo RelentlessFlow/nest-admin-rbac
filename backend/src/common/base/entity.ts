@@ -1,6 +1,6 @@
 // TypeORM 基础实体类
 import { CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import {EntityType} from "typelibrary";
+import {EntityType} from "typelibrary/entity";
 
 export class EntityBase implements EntityType{
   @PrimaryGeneratedColumn({ name: "ID" })

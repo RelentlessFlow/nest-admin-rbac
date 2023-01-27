@@ -2,7 +2,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty, Validate } from "class-validator";
 import { IsDeleteDtoProperty } from "../class-validator/role";
-import { DeleteRoleDtoType } from "typelibrary";
+import {DeleteRoleDtoType} from "typelibrary/dto/common";
 
 /**
  * 基本删除DTO类

@@ -2,7 +2,7 @@ import { Column, Entity, Index, JoinTable, ManyToMany } from "typeorm";
 import { EntityBase } from "../../common/base/entity";
 import { Resource } from "./resource";
 import { Menu } from "./memu";
-import { RoleType} from "typelibrary";
+import {RoleType} from "typelibrary/entity";
 
 @Entity("ROLE")
 export class Role extends EntityBase implements RoleType {

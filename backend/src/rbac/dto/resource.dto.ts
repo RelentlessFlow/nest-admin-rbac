@@ -8,8 +8,8 @@ import {
   DeleteResourceDtoType,
   QueryResourceDtoType,
   UpdateResourceDtoType
-} from "typelibrary";
-import {ActionPossessType} from "typelibrary";
+} from "typelibrary/dto/common";
+import {ActionPossessType} from "typelibrary/entity";
 
 export class CreateResourceDto implements CreateResourceDtoType {
   @ApiProperty({ description: "接口名称", required: true, minLength: 2, maximum: 20 })

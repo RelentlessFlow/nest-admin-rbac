@@ -1,7 +1,8 @@
 // HTTP控制器自定义装饰器
 import { UseInterceptors } from "@nestjs/common";
 import { HttpResponseInterceptor } from "../../core/interceptor/http-response.interceptor";
-import {HttpResponseType} from "typelibrary";
+import {HttpResponseType} from "typelibrary/dto/res";
+
 
 /**
  * 自定义HTTP响应格式，可传入任意参数对象   @HttpResponse({ message: '删除角色成功' })

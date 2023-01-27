@@ -81,7 +81,6 @@ export default {
   'page.admin.role.action.detail': 'Detail',
   'page.admin.role.createModal.form.title': 'New role',
   'page.admin.role.createModal.form.roleName': 'Role name is required',
-
-  // Common
-  'page.api.error': 'Server exception.'
+  'page.admin.role.updateModal.form.title': 'Edit role',
+  'page.admin.role.updateModal.form.roleName': 'Role name is required',
 };

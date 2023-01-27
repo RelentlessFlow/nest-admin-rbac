@@ -5,7 +5,7 @@ import {
   ExceptionFilter,
   HttpException,
 } from '@nestjs/common';
-import {HttpResponseType} from "typelibrary";
+import {HttpResponseType} from "typelibrary/dto/res";
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {

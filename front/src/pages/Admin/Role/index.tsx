@@ -1,32 +1,34 @@
-import React, {useCallback, useState} from "react";
-import {Button, Card, theme} from "antd";
+import React, {useCallback, useEffect, useRef, useState} from "react";
+import {Button, Card, message, theme} from "antd";
 import {FormattedMessage, useIntl, useModel} from "@umijs/max";
-import {ModalForm, PageContainer, ProColumns, ProFormText, ProFormTextArea, ProTable} from "@ant-design/pro-components";
-import request from "umi-request";
+import {ModalForm, PageContainer, ProColumns, ProFormInstance, ProFormText, ProFormTextArea, ProTable} from "@ant-design/pro-components";
 import {PlusOutlined} from "@ant-design/icons";
-import {FilterComplex, RoleType} from "typelibrary";
+import * as rbacApi from '../../../services/rbac/api'
+import moment from "moment";
+import { orderMap } from "@/common";
+import {RoleType} from "typelibrary/entity";
+import {CreateRoleDtoType, UpdateRoleDtoType} from "typelibrary/dto/common";
 
-// 新建数据模态框
+// 新建角色模态框
 const CreateModal: React.FC = () => {
   // 国际化
   const intl = useIntl();
-  const messageServerException = intl.formatMessage({id: 'page.api.error', defaultMessage: 'server exception.'})
-  // Hooks
+  // 数据流
   const {
     createModalOpen,
     setCreateModalOpen,
-    tableRef, messageApi
-  } = useModel('Admin.Role.model');
-  const handleOnFinish = useCallback(async (value: Record<string, any>) => {
-    try {
-      const { success, message } = await request.post<AdminApi.RoleAddResult>('http://localhost:9080/api/rbac/role', {data: value});
-      messageApi.open({type: success ? 'success' : 'error', content: message ?? messageServerException});
-      setCreateModalOpen(false);
-      tableRef?.current?.reload();
-    } catch (e) {
-      messageApi.open({ type: 'error', content: messageServerException + (e as Error).message });
-    }
-  }, [messageApi, setCreateModalOpen, tableRef])
+    tableRef,
+  } = useModel('Admin.Role.model', (model) => ({
+    createModalOpen: model.createModalOpen,
+    setCreateModalOpen: model.setCreateModalOpen,
+    tableRef: model.tableRef,
+  }));
+  const handleOnFinish = useCallback(async (data: CreateRoleDtoType) => {
+    let { success: _success, message: _message } = await rbacApi.addRole(data)
+    message.success(_message, 0.8);
+    tableRef?.current?.reload();
+    return _success
+  }, [setCreateModalOpen, tableRef])
   // JSX
   return <ModalForm
     title={intl.formatMessage({
@@ -53,28 +55,93 @@ const CreateModal: React.FC = () => {
   </ModalForm>
 }
 
+// 编辑角色模态框
+const EditModal: React.FC<{
+  role?: RoleType
+}> = ({role}) => {
+  const intl = useIntl()
+  const { eidtModalOpen, setEidtModalOpen, tableRef } = useModel('Admin.Role.model', (model) => ({
+    eidtModalOpen: model.editModalOpen,
+    setEidtModalOpen: model.setEidtModalOpen,
+    tableRef: model.tableRef
+  }))
+  useEffect(() => { eidtModalOpen ? formRef?.current?.setFieldsValue(role) : null }, [eidtModalOpen]) // 当表单展示的时候刷新表单数据，
+  const formRef = useRef<ProFormInstance>();
+  const handleOnFinish = useCallback(async(role: UpdateRoleDtoType) => {
+    const {success: _success, message: _message} = await rbacApi.editRole(role)
+    message.success(_message, 0.8);
+    tableRef?.current?.reload();
+    return _success
+  }, [])
+  return <ModalForm
+    formRef={formRef}
+    title={intl.formatMessage({
+      id: 'page.admin.role.updateModal.form.title', defaultMessage: 'Edit role'
+    }) + `:${role?.name}`}
+    width={'400px'}
+    open={eidtModalOpen}
+    onOpenChange={(v) => setEidtModalOpen(v)}
+    onFinish={handleOnFinish}
+    initialValues={role}
+  >
+    <ProFormText name={'id'} hidden/>
+    <ProFormText
+      name={'name'} label={'name'} width={'md'}
+      rules={[{
+        min: 2, max: 10, required: true, message: (<FormattedMessage
+          id={'page.admin.role.updateModal.form.roleName'}
+          defaultMessage={'Role name is required'}
+        />)
+      }]}
+    />
+    <ProFormTextArea
+      name="description" label={'desc'} width="md"
+      rules={[{min: 4, max: 100}]}
+    />
+  </ModalForm>
+}
+
 // ProTable查询列表
 const QueryTable: React.FC = () => {
   // 国际化
   const intl = useIntl();
-  const messageServerException = intl.formatMessage({id: 'page.api.error', defaultMessage: 'server exception.'})
+  // 数据流
+  const {
+    setCreateModalOpen, setEidtModalOpen, setCurrentRole, tableRef,
+  } = useModel('Admin.Role.model', (model) => ({
+    setCreateModalOpen: model.setCreateModalOpen,
+    setEidtModalOpen: model.setEidtModalOpen,
+    setCurrentRole: model.setCurrentRole,
+    tableRef: model.tableRef,
+  }));
+  const [pagination, setPagination] = useState({
+    pageSize: 10, current: 1
+  })
   const columns: ProColumns<RoleType>[] = [{
     dataIndex: 'index', valueType: "indexBorder", width: 48
   }, {
-    dataIndex: 'id', title: 'ID'
+    dataIndex: 'id', title: 'ID', width: 50,
   }, {
-    dataIndex: 'name', title: 'Name'
+    dataIndex: 'name', title: 'Name', sorter: true, width: 150,
+    ellipsis: true, copyable: true
   }, {
-    dataIndex: 'description', title: 'Description'
+    dataIndex: 'description', title: 'Desc', sorter: true, width: 200,
+    ellipsis: true
   }, {
-    dataIndex: 'createTime', title: 'Create Time'
+    dataIndex: 'createTime', title: 'CreateTime', sorter: true, width: 200,
+    renderText: (time) => moment(time).format('YYYY-MM-DD HH:mm:ss')
   }, {
-    dataIndex: 'updateTime', title: 'Update Time'
+    dataIndex: 'updateTime', title: 'UpdateTime', sorter: true, width: 200,
+    renderText: (time) => moment(time).format('YYYY-MM-DD HH:mm:ss')
   }, {
     title: 'actions',
     key: 'actions2',
     valueType: 'option',
-    render: (text, record, _, action) => [<a key={'actions_edit'}>
+    render: (text, record, _, action) => [
+    <a key={'actions_edit'} onClick={() => {
+      setCurrentRole(record);
+      setEidtModalOpen(true);
+    }}>
       <FormattedMessage
         id="page.admin.role.action.edit"
         defaultMessage="Edit"
@@ -86,14 +153,7 @@ const QueryTable: React.FC = () => {
       />
     </a>,]
   },]
-  const {
-    setCreateModalOpen,
-    tableRef,
-    messageApi
-  } = useModel('Admin.Role.model');
-  const [pagination, setPagination] = useState({
-    pageSize: 10, current: 1
-  })
+
   return (<ProTable<RoleType>
     headerTitle={"Role Table"}
     columns={columns}
@@ -105,14 +165,8 @@ const QueryTable: React.FC = () => {
     }}
     rowKey={'id'}
     request={async (params = {}, sort, filter) => {
-      try {
-        return await request.post<AdminApi.RoleQueryResult>('http://localhost:9080/api/rbac/role/query', {
-          data: params
-        })
-      } catch (e) {
-        messageApi.open({ type: 'error', content: messageServerException + (e as Error).message });
-        return []
-      }
+      const data = await rbacApi.role({...params, ...orderMap(sort)})
+      return data;
     }}
     showSorterTooltip={true}
     toolBarRender={() => [<Button
@@ -128,16 +182,18 @@ const QueryTable: React.FC = () => {
 const Role: React.FC = () => {
   const {token} = theme.useToken();
   const {initialState} = useModel('@@initialState');
-  const { contextHolder } = useModel('Admin.Role.model');
+  const { currentRole } = useModel('Admin.Role.model', (model) => ({
+    currentRole: model.currentRole
+  }));
 
   return (<PageContainer>
     <Card style={{borderRadius: 8}}>
       {/*查询列表*/}
-      <QueryTable/>
+      <QueryTable />
       {/*新建实体*/}
-      <CreateModal/>
+      <CreateModal />
+      <EditModal role={currentRole}/>
     </Card>
-    {contextHolder}
   </PageContainer>);
 }
 

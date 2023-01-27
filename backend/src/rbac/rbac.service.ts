@@ -7,17 +7,17 @@ import { Menu } from "./entities/memu";
 import { IdExist, UniqueColumn } from "../common/decorator/typeorm.decorator";
 import { QueryMenuDto } from "./dto/menu.dto";
 import { createComplexQuery, createDeleteQuery } from "../common/utils/db";
+import {ResourceType, RoleType} from "typelibrary/entity";
 import {
   CreateResourceDtoType,
   CreateRoleDtoType,
-  PageResponseDtoType, 
   QueryResourceDtoType,
-  QueryRoleDtoType, 
-  ResourceType, 
-  RoleType, 
+  QueryRoleDtoType,
   UpdateResourceDtoType,
   UpdateRoleDtoType
-} from "typelibrary";
+} from "typelibrary/dto/common";
+import {PageResponseDtoType} from "typelibrary/dto/pagination";
+
 
 @Injectable()
 export class RbacService {

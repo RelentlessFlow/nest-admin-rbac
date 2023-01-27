@@ -3,7 +3,7 @@ import { ApiProperty, PartialType } from "@nestjs/swagger";
 import { PageOptionsDto } from "../../common/pagination/page.dto";
 import { IsQueryProperty } from "../../common/class-validator/role";
 import { BaseDeleteDto } from "../../common/base/dto";
-import {CreateRoleDtoType, DeleteRoleDtoType, QueryRoleDtoType, UpdateRoleDtoType} from "typelibrary";
+import {CreateRoleDtoType, DeleteRoleDtoType, QueryRoleDtoType, UpdateRoleDtoType} from "typelibrary/dto/common";
 
 export class CreateRoleDto implements CreateRoleDtoType {
   @ApiProperty({ description: "角色名称", required: true, minLength: 2, maximum: 10 })

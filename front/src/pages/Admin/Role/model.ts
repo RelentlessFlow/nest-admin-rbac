@@ -1,16 +1,17 @@
 import {useRef, useState} from "react";
 import {ActionType} from "@ant-design/pro-components";
 import {message} from "antd";
+import {RoleType} from "typelibrary/entity";
 
 export default () => {
   const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
+  const [editModalOpen, setEidtModalOpen] = useState<boolean>(false);
+  const [currentRole, setCurrentRole] = useState<RoleType | undefined>(undefined);
   const tableRef = useRef<ActionType>(null)
-  const [messageApi, contextHolder] = message.useMessage();
   return {
-    createModalOpen,
-    setCreateModalOpen,
-    tableRef,
-    messageApi,
-    contextHolder
+    createModalOpen,setCreateModalOpen,
+    editModalOpen, setEidtModalOpen,
+    currentRole, setCurrentRole,
+    tableRef
   }
 }
